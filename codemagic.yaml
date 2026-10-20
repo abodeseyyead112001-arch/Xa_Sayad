@@ -1,0 +1,26 @@
+workflows:
+  default-workflow:
+    name: Xa Sayad Build
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      java: 17
+    scripts:
+      - name: Fix folder name
+        script: |
+          if [ -d "مكتبة" ]; then
+            mv "مكتبة" lib
+          fi
+          ls -la
+      - name: Create Android platform
+        script: |
+          if [ ! -d "android" ]; then
+            flutter create . --platforms=android --project-name xa_sayad
+          fi
+      - name: Get packages
+        script: flutter pub get
+      - name: Build APK
+        script: flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
